@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        
+    <style>
+        #picker-scr {
+            width: 250px;
+            height: 350px;
+            background-color: black;
+            font-size: 150px;
+            text-align: center;
+            line-height: 350px;
+        }
+
+        #pick {
+            height: 50px;
+            font-size: 25px;
+        }
+
+        html {
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-3 pb-3 text-center">
+        <div class="py-3">
+            <span class="mr-3">最小號碼：<input type="text" id="min"></span><span>最大號碼：<input type="text" id="max"></span>
+            <button class="btn btn-outline-danger" id="confirm-number">確定</button>
+            <h4 class="pt-5">已經抽過：<span id="picked-ones"></span></h4>
+        </div>
+
+        <div id="picker-scr" class="mb-4 mx-auto"></div>
+
+        <div>
+            <button class="btn btn-outline-success" id="pick" class="">抽!</button>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+        integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <script>
+        var array = new Array();
+
+        document.getElementById("pick").disabled = true;
+
+        function confirmNumber() {
+            var $min = parseInt($("#min").val());
+            var $max = parseInt($("#max").val());
+            if (parseInt($min) > parseInt($max)) {
+                alert("輸入數字不在抽獎範圍");
+            }
+            for (i = $min; i <= $max; i++) {
+                array.push(i);
+            }
+        }
+
+        function pickNumber() {
+            var current_index = array.length;
+            var value_or_rd;
+            if (current_index != 0) {
+                var rd = Math.floor(Math.random() * current_index);
+                current_index--;
+                value_or_rd = array[rd];
+                $("#picker-scr").text(value_or_rd);
+                if (current_index == 0) {
+                    document.getElementById("picked-ones").innerHTML += value_or_rd + ".";
+                    alert("抽完了")
+                }
+                else {
+                    document.getElementById("picked-ones").innerHTML += value_or_rd + ",";
+                }
+                var i = array.indexOf(value_or_rd)
+                if (i > -1) {
+                    array.splice(i, 1);
+                }
+            }
+            return array;
+        }
+
+        $("#pick").on("click", function () {
+            pickNumber();
+            document.getElementById("confirm-number").disabled = true;
+        })
+
+        $("#confirm-number").on("click", function () {
+            document.getElementById("picked-ones").innerHTML = "";
+            document.getElementById("picker-scr").innerHTML = "";
+            confirmNumber();
+            alert("開始抽");
+            document.getElementById("pick").disabled = false;
+        })
+
+        $("#min , #max").on("click", function () {
+            document.getElementById("confirm-number").disabled = false;
+        })
+    </script>
+
+</body>
+
+</html>
